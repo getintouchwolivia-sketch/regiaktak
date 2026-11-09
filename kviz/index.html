@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Napi Történelmi Kvíz - A pilisi erdő véres titka (1213)</title>
+    
+    <!-- Facebook Open Graph Meta Tag-ek a fix borítóképpel -->
+    <meta property="og:title" content="Napi Történelmi Kvíz: A pilisi erdő véres titka (1213)" />
+    <meta property="og:description" content="Teszteld a tudásod a mai történelmi kvízben!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="megosztas.jpg" />
+    <meta property="og:url" content="" id="meta-og-url" />
+
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --primary-color: #8b0000;
+            --primary-hover: #a50000;
+            --border-color: #e1e8ed;
+            --correct-color: #27ae60;
+            --wrong-color: #c0392b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .quiz-image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .quiz-image-caption {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f0f4f8;
+            border-color: #bdc3c7;
+        }
+
+        .option-btn.selected {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--correct-color) !important;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--wrong-color) !important;
+            color: #721c24;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        #submit-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+
+        #submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #result-container {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        #result-container h2 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .share-btn {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .share-btn:hover {
+            background-color: #145dbf;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📅 Napi Kvíz: A pilisi erdő véres titka (1213)</h1>
+        
+        <!-- Napi kép beillesztése a felirattal -->
+        <div class="quiz-image-container">
+            <img src="gertrud.jpg" alt="Merániai Gertrúd királyné ábrázolása a Hedwig-kódexben">
+            <div class="quiz-image-caption">Merániai Gertrúd királyné ábrázolása a Hedwig-kódexben, 1353. Ismeretlen alkotó.</div>
+        </div>
+
+        <div id="quiz-form">
+            <div id="questions-container"></div>
+            <button id="submit-btn" onclick="evaluateQuiz()">Eredmény kiértékelése</button>
+        </div>
+
+        <div id="result-container">
+            <h2>Kvíz Teljesítve!</h2>
+            <p id="score-text" style="font-size: 1.2rem; font-weight: bold; margin: 15px 0;"></p>
+            <p>Oszd meg az eredményedet a barátaiddal is:</p>
+            <button class="share-btn" onclick="shareOnFacebook()">
+                Megosztás Facebookon 📘
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "1. Mikor gyilkolták meg Gertrúd királynét?",
+                options: ["A) 1205. szeptember 28-án", "B) 1213. szeptember 28-án", "C) 1222. október 15-én", "D) 1235. június 10-én"],
+                answer: 1
+            },
+            {
+                question: "2. Ki volt Gertrúd királyné férje?",
+                options: ["A) III. Béla", "B) IV. Béla", "C) II. András", "D) I. Károly"],
+                answer: 2
+            },
+            {
+                question: "3. Melyik családból származott Gertrúd?",
+                options: ["A) Árpád-ház", "B) Andechs–Meráni hercegi család", "C) Hohenstauf család", "D) Wittelsbach család"],
+                answer: 1
+            },
+            {
+                question: "4. Hol tartózkodott II. András a merénylet idején?",
+                options: ["A) Bizáncban", "B) Ausztriában", "C) Halics elleni hadjáraton", "D) Esztergomban"],
+                answer: 2
+            },
+            {
+                question: "5. Ki volt Gertrúd testvére, aki kalocsai érsek lett?",
+                options: ["A) Ottó", "B) Bertold", "C) Bánk", "D) Simon"],
+                answer: 1
+            },
+            {
+                question: "6. Kik azok a személyek, akiket a korabeli források a merénylet résztvevőiként említenek?",
+                options: ["A) Turoy fia Péter és Kacsics nembeli Simon", "B) Bertold és VI. Lipót", "C) IV. Béla és Bánk", "D) János érsek és Ottó"],
+                answer: 0
+            },
+            {
+                question: "7. Melyik történelmi személy szerepe vitatott a királyné meggyilkolásában?",
+                options: ["A) IV. Béla", "B) Szent Erzsébet", "C) Bánk", "D) VI. Lipót"],
+                answer: 2
+            },
+            {
+                question: "8. Melyik híres mondat kapcsolódik a Gertrúd-gyilkosság történetéhez?",
+                options: ["A) A király meghalt, éljen a király!", "B) A királynét megölni nem kell félnetek…", "C) Itt az idő, most vagy soha!", "D) Vesszen a királyné!"],
+                answer: 1
+            },
+            {
+                question: "9. Ki írta a Bánk bán című drámát?",
+                options: ["A) Vörösmarty Mihály", "B) Arany János", "C) Katona József", "D) Madách Imre"],
+                answer: 2
+            },
+            {
+                question: "10. Hol temették el Gertrúd királynét?",
+                options: ["A) A budai várban", "B) A pilisi ciszterci monostorban", "C) Az esztergomi bazilikában", "D) A tihanyi apátságban"],
+                answer: 1
+            }
+        ];
+
+        let userScore = 0;
+        const selectedAnswers = {};
+
+        document.getElementById('meta-og-url').setAttribute('content', window.location.href);
+
+        function renderQuiz() {
+            const container = document.getElementById('questions-container');
+            let html = '';
+
+            quizData.forEach((q, qIndex) => {
+                html += `<div class="question-card">
+                    <div class="question-title">${q.question}</div>
+                    <div class="options-list">`;
+                
+                q.options.forEach((opt, oIndex) => {
+                    html += `<button class="option-btn" onclick="selectOption(${qIndex}, ${oIndex}, this)">${opt}</button>`;
+                });
+
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function selectOption(qIndex, oIndex, btnElement) {
+            if (document.getElementById('submit-btn').style.display === 'none') return;
+
+            const parent = btnElement.parentElement;
+            parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            
+            btnElement.classList.add('selected');
+            selectedAnswers[qIndex] = oIndex;
+        }
+
+        function evaluateQuiz() {
+            if (Object.keys(selectedAnswers).length < quizData.length) {
+                alert("Kérlek válaszolj minden kérdésre mielőtt kiértékeled!");
+                return;
+            }
+
+            userScore = 0;
+            quizData.forEach((q, qIndex) => {
+                const card = document.querySelectorAll('.question-card')[qIndex];
+                const buttons = card.querySelectorAll('.option-btn');
+                
+                buttons.forEach((btn, oIndex) => {
+                    btn.disabled = true;
+                    btn.classList.remove('selected');
+                    if (oIndex === q.answer) {
+                        btn.classList.add('correct');
+                    } else if (oIndex === selectedAnswers[qIndex]) {
+                        btn.classList.add('wrong');
+                    }
+                });
+
+                if (selectedAnswers[qIndex] === q.answer) {
+                    userScore++;
+                }
+            });
+
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('score-text').innerHTML = `Eredményed: ${userScore} / ${quizData.length} pont (${Math.round((userScore/quizData.length)*100)}%)`;
+            document.getElementById('result-container').style.display = 'block';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function shareOnFacebook() {
+            const currentUrl = window.location.href;
+            const shareText = encodeURIComponent(`Most oldottam meg a mai történelmi kvízt (${userScore}/${quizData.length} pont)! Teszteld te is a tudásod:`);
+            const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${shareText}`;
+            window.open(fbShareUrl, '_blank', 'width=600,height=400');
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>
